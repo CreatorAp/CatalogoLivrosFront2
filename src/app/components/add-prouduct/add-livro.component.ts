@@ -1,27 +1,26 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Category } from 'src/app/models/category';
 import { Status } from 'src/app/models/status';
-import { CategoryService } from 'src/app/services/category.service';
-import { ProductService } from 'src/app/services/product.service';
+
+import { LivroService } from 'src/app/services/livro.service';
 
 @Component({
   selector: 'app-add-prouduct',
-  templateUrl: './add-prouduct.component.html',
-  styleUrls: ['./add-prouduct.component.css']
+  templateUrl: './add-livro.component.html',
+  styleUrls: ['./add-livro.component.css']
 })
 export class AddProuductComponent implements OnInit {
 
   frm!:FormGroup;
   status!:Status;
-  categories!:Category[]; //for binding a category dropdown
+  
   get f(){
-    return this.frm.controls; //will be used in validation
+    return this.frm.controls; 
   }
 
   onPost(){
-    this.status={statusCode:0,message:'wait..'};
+    this.status={statusCode:0,message:'..'};
     this.productService.addUpdate(this.frm.value).subscribe({
       next:(res)=>{
         this.status=res;
@@ -35,18 +34,8 @@ export class AddProuductComponent implements OnInit {
     })
   }
 
-  private getCategories(){
-    this.categoryService.getAll().subscribe({
-      next:(res)=>{
-        this.categories=res;
-        console.log(this.categories);
-      },
-      error:(err)=>{
-        console.log(err);
-      }
-    })
-  }
-  constructor(private fb:FormBuilder,private categoryService:CategoryService,private productService:ProductService,route:ActivatedRoute ) { 
+
+  constructor(private fb:FormBuilder,private productService:LivroService,route:ActivatedRoute ) { 
   
     const id= route.snapshot.params['id'];
     if(id){
@@ -65,12 +54,17 @@ export class AddProuductComponent implements OnInit {
 
   ngOnInit(): void {
     this.frm= this.fb.group({
-      'id':[0],
-      'name':['',Validators.required],
-      'categoryId':[0,Validators.required],
-      'price':[0,Validators.required]
+      'id':[0], 
+      'titulo': ['',Validators.required],
+      'ibsn': [1,Validators.required],
+      'autor': ['',Validators.required],
+      'editora': ['',Validators.required],
+      'sinopse': ['',Validators.required],
+      'foto': ['',Validators.required],
+      'genero': ['',Validators.required],
+
     })
-    this.getCategories();
+    
   }
 
  

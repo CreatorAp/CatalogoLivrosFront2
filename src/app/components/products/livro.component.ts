@@ -1,22 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Category } from 'src/app/models/category';
-import { Product } from 'src/app/models/product';
-import { CategoryService } from 'src/app/services/category.service';
-import { ProductService } from 'src/app/services/product.service';
+
+import { Livro } from 'src/app/models/livro';
+
+import { LivroService } from 'src/app/services/livro.service';
 
 @Component({
   selector: 'app-products',
-  templateUrl: './products.component.html',
-  styleUrls: ['./products.component.css']
+  templateUrl: './livro.component.html',
+  styleUrls: ['./livro.component.css']
 })
 export class ProductsComponent implements OnInit {
-  products!:Product[];
+  products!:Livro[];
 
   private getProducts(term=""){
     this.productService.getAll(term).subscribe({
       next:(res)=>{
         this.products=res;
+        console.log(res);
       },
       error:(err)=>{
         console.log(err);
@@ -49,7 +50,7 @@ export class ProductsComponent implements OnInit {
     })
   }
   }
-  constructor(private productService:ProductService,private router:Router) { }
+  constructor(private productService:LivroService,private router:Router) { }
 
   ngOnInit(): void {
     this.getProducts();

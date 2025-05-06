@@ -1,26 +1,28 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+
 import { Status } from 'src/app/models/status';
-import { CategoryService } from 'src/app/services/category.service';
+
+import { UsuarioService } from 'src/app/services/usuario.service';
 
 @Component({
-  selector: 'app-add-category',
-  templateUrl: './add-category.component.html',
-  styleUrls: ['./add-category.component.css']
+  selector: 'app-add-usuario',
+  templateUrl: './add-usuario.component.html',
+  styleUrls: ['./add-usuario.component.css']
 })
-export class AddCategoryComponent implements OnInit {
+export class AddUsuarioComponent implements OnInit {
 
-  
   frm!:FormGroup;
   status!:Status;
+
   get f(){
     return this.frm.controls; //will be used in validation
   }
 
   onPost(){
-    this.status={statusCode:0,message:'wait..'};
-    this.categoryService.addUpdate(this.frm.value).subscribe({
+    this.status={statusCode:0,message:'..'};
+    this.usuarioService.addUpdate(this.frm.value).subscribe({
       next:(res)=>{
         this.status=res;
         if(this.status.statusCode==1){
@@ -32,10 +34,13 @@ export class AddCategoryComponent implements OnInit {
       }
     })
   }
-  constructor(private fb:FormBuilder,private categoryService:CategoryService,route:ActivatedRoute ) { 
+
+
+  constructor(private fb:FormBuilder,private usuarioService:UsuarioService,route:ActivatedRoute ) { 
+  
     const id= route.snapshot.params['id'];
     if(id){
-      categoryService.getById(id).subscribe(
+      usuarioService.getById(id).subscribe(
         {
           next:(res)=>{
             this.frm.patchValue(res);      
@@ -45,14 +50,22 @@ export class AddCategoryComponent implements OnInit {
           }
         }
       );
-    }
   }
+}
 
   ngOnInit(): void {
     this.frm= this.fb.group({
       'id':[0],
-      'name':['',Validators.required]
+
+      'nome': ['',Validators.required],
+      'dataNascimento': ['',Validators.required],
+      'email': ['',Validators.required],
+      'senha': ['',Validators.required],
+
     })
+    // this.getCategories();
   }
+
+ 
 
 }
